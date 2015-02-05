@@ -44,7 +44,6 @@ public class MainActivity extends Activity {
 	public void takeAPhoto() {
 		// TODO: Create an intent with the action
 		// MediaStore.ACTION_IMAGE_CAPTURE
-		
 		// ComponentName cn = new ComponentName("es.softwareprocess.bogopicgen",
 		// "es.softwareprocess.bogopicgen.BogoPicGenActivity");
 		// ComponentName cn = new ComponentName("com.android.camera",
@@ -65,8 +64,11 @@ public class MainActivity extends Activity {
 		File imageFile = new File(imageFilePath);
 		imageFileUri = Uri.fromFile(imageFile);
 
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		intent.putExtra(MediaStore.EXTRA_OUTPUT,imageFileUri);
 		// TODO: Put in the intent in the tag MediaStore.EXTRA_OUTPUT the URI
 		
+		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 		// TODO: Start the activity (expecting a result), with the code
 		// CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE
 		
@@ -74,7 +76,22 @@ public class MainActivity extends Activity {
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO: Handle the results from CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE
-		
+		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE){
+			if (requestCode == RESULT_OK){
+					TextView tv =(TextView)findViewById(R.id.status);
+					tv.setText("Photo  Ok");
+					ImageButton ib = (ImageButton) findViewById(R.id.TakeAPhoto);
+					Drawable picture = Drawable.createFromPath(imageFileUri.getPath());
+					ib.setImageDrawable(picture);
+			}else if (requestCode == RESULT_CANCELED){
+				TextView tv =(TextView)findViewById(R.id.status);
+				tv.setText("Photo  Canceled");
+			}else{
+				TextView tv =(TextView)findViewById(R.id.status);
+				tv.setText("Photo  idk");
+				
+			}
+		}
 		// TODO: Handle the cases for RESULT_OK, RESULT_CANCELLED, and others
 		
 		// When the result is OK, set text "Photo OK!" in the status
